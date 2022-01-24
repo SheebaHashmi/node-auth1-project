@@ -1,6 +1,8 @@
-// Require `checkUsernameFree`, `checkUsernameExists` and `checkPasswordLength`
+ // Require `checkUsernameFree`, `checkUsernameExists` and `checkPasswordLength`
 // middleware functions from `auth-middleware.js`. You will need them here!
-
+const Router = require('express').Router();
+const helper = require('../users/users-model');
+const router = require('../users/users-router');
 
 /**
   1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
@@ -24,40 +26,65 @@
     "message": "Password must be longer than 3 chars"
   }
  */
-
+router.post('/register',(req,res,next) => {
+  try{
+    res.json('register')
+  }
+  catch(err){
+    next(err)
+  }
+})
 
 /**
-  2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "message": "Welcome sue!"
+ 2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
+ 
+ response:
+ status 200
+ {
+   "message": "Welcome sue!"
   }
-
+  
   response on invalid credentials:
   status 401
   {
     "message": "Invalid credentials"
   }
- */
-
-
-/**
+  */
+ 
+ router.post('/login',(req,res,next) => {
+   try{
+    res.json('login')
+  }
+  catch(err){
+    next(err)
+   }
+  })
+  
+  /**
   3 [GET] /api/auth/logout
-
+  
   response for logged-in users:
   status 200
   {
     "message": "logged out"
   }
-
+  
   response for not-logged-in users:
   status 200
   {
     "message": "no session"
   }
- */
+  */
+router.get('/logout',(req,res,next) => {
+
+  try{
+    res.json('logout')
+  }
+  catch(err){
+    next(err)
+   }
+})
 
  
 // Don't forget to add the router to the `exports` object so it can be required in other modules
+module.exports = router
