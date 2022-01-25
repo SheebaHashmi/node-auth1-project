@@ -59,19 +59,13 @@ router.post('/register',checkUsernameFree,checkPasswordLength,async (req,res,nex
   }
   */
  
- router.post('/login',checkUsernameExists,async (req,res,next) => {
+ router.post('/login',checkUsernameExists, (req,res,next) => {
    try{
-    const {username,password} = req.body
-    // const [user] = await helper.findBy({username})
-    console.log(req.user)
-    if(req.user && bcrypt.compareSync(password,password)){
       req.session.user = req.user
-      next({status:200, message:`Welcome ${username}!`})
-    }
-   
+      next({status:200, message:`Welcome ${req.user.username}!`})
   }
   catch(err){
-    next(err)
+    next('error',err)
    }
   })
   

@@ -1,5 +1,6 @@
 
 const helpers = require('../users/users-model')
+const bcrypt = require('bcryptjs');
 /*
   If the user does not have a session saved in the server
 
@@ -45,14 +46,16 @@ async function checkUsernameFree(req,res,next) {
   }
 */
 async function checkUsernameExists(req,res,next) {
-  const [takenUsername] = await helpers.findBy({"username":req.body.username})
-
-  if(takenUsername === undefined){
-    next({status:401, "message":"Invalid credentials"})
+  const {username,password} = req.body
+  const [existing] = await helpers.findBy({username})
+  
+  if(existing && bcrypt.compareSync(password,existing.password)){
+    req.user = existing;
+    next()
   }
   else{
-    req.user = takenUsername;
-    next()
+    next({status:401, "message":"Invalid credentials"})
+    
   }
 }
 
