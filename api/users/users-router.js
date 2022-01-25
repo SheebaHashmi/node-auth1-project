@@ -27,11 +27,10 @@ const {restricted} = require('../auth/auth-middleware')
 router.get('/',restricted, async (req,res,next) => {
   try{
     const users = await Users.find()
-    console.log(users)
     res.status(200).json(users)
   }
-  catch{
-    next({status: 401,message: "You shall not pass!"})
+  catch(err){
+    next(err)
   }
 
 })
